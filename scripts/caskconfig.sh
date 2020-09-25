@@ -134,6 +134,12 @@ echo "---------------------------------------------------------"
 npm install -g vtop
 
 echo "---------------------------------------------------------"
+echo "$(tput setaf 2)Installing vim-plug.$(tput sgr 0)"
+echo "---------------------------------------------------------"
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+echo "---------------------------------------------------------"
 echo "$(tput setaf 2)Installing Neovim plugins and linking dotfiles.$(tput sgr 0)"
 echo "---------------------------------------------------------"
 
