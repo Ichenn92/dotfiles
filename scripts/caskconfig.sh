@@ -34,6 +34,8 @@ packages=(
   "neovim"
   "python3"
   "zsh"
+  "zsh-completions"
+  "zsh-syntax-highlighting"
   "fzf"
   "sambadevi/powerlevel9k"
   "exercism"
