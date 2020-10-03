@@ -52,6 +52,7 @@ casks_packages=(
   "font-hack-nerd-font"
   "iterm2"
   "visual-studio-code"
+  "typora"
 )
 
 for i in "${packages[@]}"
