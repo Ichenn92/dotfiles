@@ -9,7 +9,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'git://git.wincent.com/command-t.git'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
-
+" Highlighter
+Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript'
 " Install Denite 
 if has('nvim')
   Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
