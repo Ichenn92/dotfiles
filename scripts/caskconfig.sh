@@ -27,6 +27,9 @@ echo "---------------------------------------------------------"
 
 packages=(
   "git"
+  "wget"
+  "jq"
+  "openssl"
   "stow"
   "node"
   "ruby"
