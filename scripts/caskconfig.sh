@@ -57,6 +57,7 @@ casks_packages=(
   "iterm2"
   "visual-studio-code"
   "typora"
+  "miniconda"
 )
 
 for i in "${packages[@]}"
