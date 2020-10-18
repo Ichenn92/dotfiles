@@ -28,6 +28,7 @@ echo "---------------------------------------------------------"
 packages=(
   "git"
   "wget"
+  "jupyter"
   "jq"
   "openssl"
   "stow"
