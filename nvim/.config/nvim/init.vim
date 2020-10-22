@@ -10,19 +10,14 @@ Plug 'mhinz/vim-signify'
 
 " Automatically show Vim's complete menu while typing.
 Plug 'vim-scripts/AutoComplPop'
-
+Plug 'Yggdroot/indentLine'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'git://git.wincent.com/command-t.git'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
-" Highlighter
-
-"Plug 'mxw/vim-jsx'
-"Plug 'pangloss/vim-javascript'
 " Install Denite 
 if has('nvim')
   Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
