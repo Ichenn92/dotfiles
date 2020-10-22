@@ -2,16 +2,27 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 call plug#begin()
+" Briefly highlight which text was yanked.
+Plug 'machakann/vim-highlightedyank'
+
+" Show git file changes in the gutter.
+Plug 'mhinz/vim-signify'
+
+" Automatically show Vim's complete menu while typing.
+Plug 'vim-scripts/AutoComplPop'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 Plug 'git://git.wincent.com/command-t.git'
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
 " Highlighter
-Plug 'mxw/vim-jsx'
-Plug 'pangloss/vim-javascript'
+
+"Plug 'mxw/vim-jsx'
+"Plug 'pangloss/vim-javascript'
 " Install Denite 
 if has('nvim')
   Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -22,21 +33,37 @@ else
 endif
 call plug#end()            " required
 
-
-
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 Plug 'bhilburn/powerlevel9k'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'chr4/nginx.vim'
+Plug 'chrisbra/csv.vim'
+Plug 'ekalinin/dockerfile.vim'
+Plug 'elixir-editors/vim-elixir'
+Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'godlygeek/tabular' | Plug 'tpope/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
+Plug 'jvirtanen/vim-hcl'
+Plug 'lifepillar/pgsql.vim'
+Plug 'othree/html5.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'PotatoesMaster/i3-vim-syntax'
+Plug 'stephpy/vim-yaml'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-liquid'
+Plug 'tpope/vim-rails'
+Plug 'vim-python/python-syntax'
+Plug 'vim-ruby/vim-ruby'
+Plug 'wgwoods/vim-systemd-syntax'
 
-set shiftwidth=2
 set shell=/bin/bash
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_working_path_mode = 0
-
 packloadall
 syntax on
 
-:set number relativenumber
 
 :augroup numbertoggle
 :  autocmd!
@@ -49,13 +76,88 @@ let g:airline_theme='bubblegum'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
-" Always show statusline
-" ------
-set laststatus=2
-" ------
+" Set the color scheme.
+colorscheme one
+set background=dark
 
-" Set line number
+" -----------------------------------------------------------------------------
+" Basic Settings
+"   Research any of these by running :help <setting>
+" -----------------------------------------------------------------------------
+
+let mapleader=" "
+let maplocalleader=" "
+
+set number relativenumber
 set number
+set autoindent
+set autoread
+set backspace=indent,eol,start
+set backupdir=/tmp//,.
+set clipboard=unnamedplus
+set colorcolumn=120
+set complete+=kspell
+set completeopt=menuone,longest
+set cryptmethod=blowfish2
+set cursorline
+set directory=/tmp//,.
+set encoding=utf-8
+set expandtab smarttab
+set formatoptions=tcqrn1
+set hidden
+set hlsearch
+set ignorecase
+set incsearch
+set laststatus=2
+set matchpairs+=<:> " Use % to jump between pairs
+set mmp=5000
+set modelines=2
+set mouse=a
+set nocompatible
+set noerrorbells visualbell t_vb=
+set noshiftround
+set nospell
+set nostartofline
+set regexpengine=1
+set ruler
+set scrolloff=3
+set shiftwidth=2
+set showcmd
+set showmatch
+set shortmess+=c
+set showmode
+set smartcase
+set softtabstop=2
+set spelllang=en_us
+set splitbelow
+set splitright
+set tabstop=2
+set textwidth=0
+set ttimeout
+set timeoutlen=1000
+set ttimeoutlen=0
+set ttyfast
+set ttymouse=sgr
+set undodir=/tmp
+set undofile
+set virtualedit=block
+set whichwrap=b,s,<,>
+set wildmenu
+set wildmode=full
+set wrap
+
+" Navigate around splits with a single key combo.
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-h> <C-w><C-h>
+nnoremap <C-k> <C-w><C-k>
+nnoremap <C-j> <C-w><C-j>
+
+" Prevent x from overriding what's in the clipboard.
+noremap x "_x
+noremap X "_x
+
+" Auto-resize splits when Vim gets resized.
+autocmd VimResized * wincmd =
 
 " Nerdtree Settings
 augroup nerdtree_open
@@ -64,6 +166,7 @@ augroup nerdtree_open
 augroup END
 set mouse=a
 map <C-n> :NERDTreeToggle<CR>
+
 let g:NERDTreeNodeDelimiter = "\u00a0"
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
