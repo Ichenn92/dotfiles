@@ -4,11 +4,11 @@ filetype off                  " required
 call plug#begin()
 " Briefly highlight which text was yanked.
 Plug 'machakann/vim-highlightedyank'
-
 " Show git file changes in the gutter.
 Plug 'mhinz/vim-signify'
 
 " Automatically show Vim's complete menu while typing.
+Plug 'arcticicestudio/nord-vim'
 Plug 'vim-scripts/AutoComplPop'
 Plug 'Yggdroot/indentLine'
 Plug 'vim-airline/vim-airline'
@@ -26,7 +26,7 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
-call plug#end()            " required
+call plug#end()
 
 filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
@@ -72,8 +72,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
 " Set the color scheme.
-colorscheme one
-set background=dark
+colorscheme nord
 
 " -----------------------------------------------------------------------------
 " Basic Settings
@@ -175,7 +174,7 @@ map tt :NERDTreeToggle<CR> "double click t button to toggle NerdTree
 map [] :TagbarToggle<CR> "click [] to toggle Tagbar
 
 " === Denite shorcuts === "
-" " === Denite shorcuts === "
+" === Denite shorcuts === "
 "   ;         - Browser currently open buffers
 "   <leader>t - Browse list of files in current directory
 "   <leader>g - Search current directory for occurences of given term and
