@@ -7,17 +7,16 @@ Plug 'machakann/vim-highlightedyank'
 " Show git file changes in the gutter.
 Plug 'mhinz/vim-signify'
 
-" Automatically show Vim's complete menu while typing.
-Plug 'arcticicestudio/nord-vim'
-Plug 'vim-scripts/AutoComplPop'
+Plug 'arcticicestudio/nord-vim' " ColorScheme
+Plug 'vim-scripts/AutoComplPop' " autocomplet popup
 Plug 'Yggdroot/indentLine'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'git://git.wincent.com/command-t.git'
-Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline' " add bar info at the bottom
+Plug 'vim-airline/vim-airline-themes' " theme
+Plug 'tpope/vim-fugitive' " git plugin for vim
+Plug 'tpope/vim-surround' " allow changing surrounding content like '' or parenthesis
+Plug 'git://git.wincent.com/command-t.git' "fuzzfile
+Plug 'rstacruz/sparkup', {'rtp': 'vim/'} " parser for html
+Plug 'scrooloose/nerdtree' " navigation file
 " Install Denite 
 if has('nvim')
   Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
