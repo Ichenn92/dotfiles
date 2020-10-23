@@ -55,50 +55,51 @@ Plug 'wgwoods/vim-systemd-syntax'
 
 set shell=/bin/bash
 set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:ctrlp_working_path_mode = 0
+"let g:ctrlp_working_path_mode = 0
 packloadall
-syntax on
 
+" ======================================================================================== "
+" === Airline Settings === "
+" ======================================================================================== "
+let g:airline_theme='bubblegum'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+" ======================================================================================== "
+" === ColorScheme === "
+" ======================================================================================== "
+colorscheme nord
+
+" -----------------------------------------------------------------------------
+" === Basic Settings ===
+" === Research any of these by running :help <setting> ===
+" -----------------------------------------------------------------------------
+let mapleader=" "
+let maplocalleader=" "
+
+"set hidden
+"set cryptmethod=blowfish2
 
 :augroup numbertoggle
 :  autocmd!
 :  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
 :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 :augroup END
-
-" Airline
-let g:airline_theme='bubblegum'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-
-" Set the color scheme.
-colorscheme nord
-
-" -----------------------------------------------------------------------------
-" Basic Settings
-"   Research any of these by running :help <setting>
-" -----------------------------------------------------------------------------
-
-let mapleader=" "
-let maplocalleader=" "
-
-set number relativenumber
-set number
-set autoindent
-set autoread
+syntax on
 set backspace=indent,eol,start
 set backupdir=/tmp//,.
-set clipboard=unnamedplus
+set number relativenumber
+set autoindent
+set autoread
+set clipboard+=unnamedplus
 set colorcolumn=120
 set complete+=kspell
 set completeopt=menuone,longest
-set cryptmethod=blowfish2
 set cursorline
 set directory=/tmp//,.
 set encoding=utf-8
 set expandtab smarttab
 set formatoptions=tcqrn1
-set hidden
 set hlsearch
 set ignorecase
 set incsearch
@@ -114,7 +115,7 @@ set nospell
 set nostartofline
 set regexpengine=1
 set ruler
-set scrolloff=3
+set scrolloff=5
 set shiftwidth=2
 set showcmd
 set showmatch
@@ -125,13 +126,9 @@ set softtabstop=2
 set spelllang=en_us
 set splitbelow
 set splitright
-set tabstop=2
-set textwidth=0
 set ttimeout
 set timeoutlen=1000
 set ttimeoutlen=0
-set ttyfast
-set ttymouse=sgr
 set undodir=/tmp
 set undofile
 set virtualedit=block
@@ -140,6 +137,9 @@ set wildmenu
 set wildmode=full
 set wrap
 
+" ======================================================================================== "
+" === Split Settings === "
+" ======================================================================================== "
 " Navigate around splits with a single key combo.
 nnoremap <C-l> <C-w><C-l>
 nnoremap <C-h> <C-w><C-h>
@@ -153,7 +153,9 @@ noremap X "_x
 " Auto-resize splits when Vim gets resized.
 autocmd VimResized * wincmd =
 
-" Nerdtree Settings
+" ======================================================================================== "
+" === Nerdtree Settings === "
+" ======================================================================================== "
 augroup nerdtree_open
     autocmd!
     autocmd VimEnter * NERDTree | wincmd p
@@ -173,8 +175,10 @@ set lazyredraw
 map tt :NERDTreeToggle<CR> "double click t button to toggle NerdTree
 map [] :TagbarToggle<CR> "click [] to toggle Tagbar
 
+
+" ======================================================================================== "
 " === Denite shorcuts === "
-" === Denite shorcuts === "
+" ======================================================================================== "
 "   ;         - Browser currently open buffers
 "   <leader>t - Browse list of files in current directory
 "   <leader>g - Search current directory for occurences of given term and
