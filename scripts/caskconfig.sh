@@ -27,7 +27,6 @@ echo "---------------------------------------------------------"
 
 packages=(
   "git"
-  "docker"
   "wget"
   "jupyter"
   "jq"
@@ -60,6 +59,7 @@ casks_packages=(
   "typora"
   "figma"
   "miniconda"
+  "docker"
 )
 
 for i in "${packages[@]}"
