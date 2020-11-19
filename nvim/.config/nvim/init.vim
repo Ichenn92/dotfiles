@@ -17,14 +17,15 @@ Plug 'tpope/vim-surround' " allow changing surrounding content like '' or parent
 Plug 'git://git.wincent.com/command-t.git' "fuzzfile
 Plug 'rstacruz/sparkup', {'rtp': 'vim/'} " parser for html
 Plug 'scrooloose/nerdtree' " navigation file
+Plug 'ryanoasis/vim-devicons' " vim icon for nerdtree
 " Install Denite 
-if has('nvim')
-  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/denite.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+"if has('nvim')
+"  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+"  Plug 'Shougo/denite.nvim'
+"  Plug 'roxma/nvim-yarp'
+"  Plug 'roxma/vim-hug-neovim-rpc'
+"endif
 call plug#end()
 
 filetype plugin indent on    " required
@@ -183,10 +184,10 @@ map [] :TagbarToggle<CR> "click [] to toggle Tagbar
 "   <leader>g - Search current directory for occurences of given term and
 "   close window if no results
 "   <leader>j - Search current directory for occurences of word under cursor
-nmap ; :Denite buffer -split=floating -winrow=1<CR>
-nmap <leader>t :Denite file/rec -split=floating -winrow=1<CR>
-nnoremap <leader>g :<C-u>Denite grep:. -no-empty -mode=normal<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
+"nmap ; :Denite buffer -split=floating -winrow=1<CR>
+"nmap <leader>t :Denite file/rec -split=floating -winrow=1<CR>
+"nnoremap <leader>g :<C-u>Denite grep:. -no-empty -mode=normal<CR>
+"nnoremap <leader>j :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
 " Custom options for Denite
 "   auto_resize             - Auto resize the Denite window height automatically.
 "   prompt                  - Customize denite prompt
@@ -196,14 +197,14 @@ nnoremap <leader>j :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
 "   prompt_highlight        - Specify color of prompt
 "   highlight_matched_char  - Matched characters highlight
 "   highlight_matched_range - matched range highlight
-let s:denite_options = {'default' : {
-\ 'auto_resize': 1,
-\ 'prompt': 'λ:',
-\ 'direction': 'rightbelow',
-\ 'winminheight': '10',
-\ 'highlight_mode_insert': 'Visual',
-\ 'highlight_mode_normal': 'Visual',
-\ 'prompt_highlight': 'Function',
-\ 'highlight_matched_char': 'Function',
-\ 'highlight_matched_range': 'Normal'
-\ }}
+"let s:denite_options = {'default' : {
+"\ 'auto_resize': 1,
+"\ 'prompt': 'λ:',
+"\ 'direction': 'rightbelow',
+"\ 'winminheight': '10',
+"\ 'highlight_mode_insert': 'Visual',
+"\ 'highlight_mode_normal': 'Visual',
+"\ 'prompt_highlight': 'Function',
+"\ 'highlight_matched_char': 'Function',
+"\ 'highlight_matched_range': 'Normal'
+"\ }}

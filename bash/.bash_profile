@@ -5,3 +5,4 @@ export EDITOR="code -w"
 
 echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
 alias python="python3"
+eval "$(pyenv init -)"
