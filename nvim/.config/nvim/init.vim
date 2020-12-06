@@ -6,7 +6,7 @@ call plug#begin()
 Plug 'machakann/vim-highlightedyank'
 " Show git file changes in the gutter.
 Plug 'mhinz/vim-signify'
-Plug 'jiangmiao/auto-pairs' " Create double surround
+" Plug 'jiangmiao/auto-pairs' " Create double surround
 Plug 'arcticicestudio/nord-vim' " ColorScheme
 Plug 'vim-scripts/AutoComplPop' " autocomplet popup
 Plug 'Yggdroot/indentLine'
