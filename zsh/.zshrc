@@ -93,9 +93,10 @@ POWERLEVEL9K_MODE='awesome-fontconfig' ZSH_THEME="powerlevel9k/powerlevel9k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(sudo git history taskwarrior tmux tmuxinator zsh-autosuggestions zsh-completions zsh-syntax-highlighting) 
+# Can add tmux tmuxinator
+plugins=(sudo git history taskwarrior zsh-autosuggestions zsh-completions zsh-syntax-highlighting) 
 source $ZSH/oh-my-zsh.sh
-plugins=(… zsh-completions)
+# plugins=(… zsh-completions)
   autoload -U compinit && compinit
 # User configuration
 
