@@ -162,19 +162,26 @@ augroup nerdtree_open
 augroup END
 set mouse=a
 map <C-n> :NERDTreeToggle<CR>
-
+let NERDTreeShowHidden = 0
+let g:NERDTreeIgnore = ['^node_modules$']
 let g:NERDTreeNodeDelimiter = "\u00a0"
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
-let NERDTreeQuitOnOpen = 1
+let NERDTreeQuitOnOpen = 0
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 set ttyfast
 set lazyredraw
-map tt :NERDTreeToggle<CR> "double click t button to toggle NerdTree
-map [] :TagbarToggle<CR> "click [] to toggle Tagbar
 
+" ======================================================================================== "
+" === CTRLP === "
+" ======================================================================================== "
+let g:ctrlp_max_height = 50
+let g:ctrlp_custom_ignore = 'node_modules\|^\.DS_Store\|^\.git'
+let g:ctrlp_working_path_mode = 'ar' " CtrlP scans through .git project
+let g:ctrlp_max_files = 0 " Set no max file limit
+let g:ctrlp_show_hidden = 1
 
 " ======================================================================================== "
 " === Denite shorcuts === "
