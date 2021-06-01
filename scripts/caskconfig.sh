@@ -28,24 +28,15 @@ echo "---------------------------------------------------------"
 packages=(
   "git"
   "wget"
-  "jupyter"
-  "jq"
   "openssl"
   "stow"
-  "node"
   "ruby"
   "tmux"
   "neovim"
-  "python3"
   "zsh"
   "fzf"
   "sambadevi/powerlevel9k"
-  "exercism"
-  "imagemagick"
   "reattach-to-user-namespace"
-#  "shpotify"
-#  "tmux"
-  "heroku/brew/heroku"
   "sambadevi/powerlevel9k/powerlevel9k"
   "sambadevi/powerlevel9k/powerlevel9k@0.6.3"
 )
@@ -53,13 +44,13 @@ casks_packages=(
   "amethyst"
   "notion"
   "slack"
-  "font-hack-nerd-font"
   "iterm2"
   "visual-studio-code"
   "typora"
   "figma"
   "miniconda"
   "docker"
+  "go"
 )
 
 for i in "${packages[@]}"
@@ -74,24 +65,9 @@ brew cask install $i
 echo "---------------------------------------------------------"
 done
 
+brew tap aws/tap
+brew install aws-sam-cli
 
-echo "---------------------------------------------------------"
-echo "$(tput setaf 2)Installing Python NeoVim client.$(tput sgr 0)"
-echo "---------------------------------------------------------"
-
-pip3 install neovim
-
-echo "---------------------------------------------------------"
-echo "$(tput setaf 2)Installing node neovim package$(tput sgr 0)"
-echo "---------------------------------------------------------"
-
-npm install -g neovim
-
-echo "---------------------------------------------------------"
-echo "$(tput setaf 2)Installing spaceship prompt$(tput sgr 0)"
-echo "---------------------------------------------------------"
-
-npm i -g bash-language-server
 
 echo "---------------------------------------------------------"
 echo "$(tput setaf 2)Installing colorls$(tput sgr 0)"

@@ -1,54 +1,21 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-
-export HOMEBREW_NO_ANALYTICS=1
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/tristanhorler/.oh-my-zsh"
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
-# Load rbenv if installed (To manage your Ruby versions)
-
-# If you come from bash you might have to change your $PATH.
-export PATH="$HOME/bin:/usr/local/bin:$PATH"
-#export PATH="/usr/local/opt/ruby/bin:$PATH"
-type -a rbenv > /dev/null && eval "$(rbenv init -)"
-
-
-# Rails and Ruby uses the local `bin` folder to store binstubs.
-# So instead of running `bin/rails` like the doc says, just run `rails`
-# Same for `./node_modules/.bin` and nodejs
-export PATH="./bin:./node_modules/.bin:${PATH}:/usr/local/sbin"
-
-
-# Load pyenv (To manage your Python versions)
-export PATH="${HOME}/.pyenv/bin:${PATH}" # Needed for Linux/WSL
-type -a pyenv > /dev/null && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
-
-
-# Load nvm if installed (To manage your Node versions)
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-
-
-
-# Load 'lewagon' virtualenv for the Data Bootcamp. You can comment these 2 lines to disable this behavior.
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-pyenv activate lewagon 2>/dev/null && echo "🐍 Loading 'lewagon' virtualenv"
-
+export ZSH="/Users/admin/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-POWERLEVEL9K_MODE='awesome-fontconfig' ZSH_THEME="powerlevel10k/powerlevel10k"
-
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -85,6 +52,8 @@ POWERLEVEL9K_MODE='awesome-fontconfig' ZSH_THEME="powerlevel10k/powerlevel10k"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
+# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -108,11 +77,10 @@ POWERLEVEL9K_MODE='awesome-fontconfig' ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-# Can add tmux tmuxinator
-plugins=(sudo git history taskwarrior zsh-autosuggestions zsh-completions zsh-syntax-highlighting) 
+plugins=(git)
+
 source $ZSH/oh-my-zsh.sh
-# plugins=(… zsh-completions)
-  autoload -U compinit && compinit
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -138,6 +106,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias serve='ruby -run -e httpd . -p 8000'
+source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
