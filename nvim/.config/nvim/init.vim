@@ -18,7 +18,8 @@ Plug 'git://git.wincent.com/command-t.git' "fuzzfile
 Plug 'scrooloose/nerdtree' " navigation file
 Plug 'ryanoasis/vim-devicons' " vim icon for nerdtree
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'wakatime/vim-wakatime'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 " Install Denite 
 "if has('nvim')
 "  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
