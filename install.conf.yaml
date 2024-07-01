@@ -3,6 +3,7 @@
 - link:
     ~/.profile: profile
     ~/.gitconfig: gitconfig
+    ~/.p10k.zsh: p10k.zsh
     ~/.ssh/config:
         path: ssh/config
         create: true
