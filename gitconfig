@@ -1,0 +1,13 @@
+[commit]
+	gpgsign = true
+[user]
+	signingkey = EAA517B476057721
+	name = IchennDev
+	email = tristan.horler@gmail.com
+[core]
+	editor = vim
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
