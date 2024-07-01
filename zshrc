@@ -28,12 +28,6 @@ eval "$(rbenv init - zsh)"
 # Java injected binary.
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
-
-# Herd injected PHP 8.2 configuration.
-export HERD_PHP_82_INI_SCAN_DIR="/Users/tristan/Library/Application Support/Herd/config/php/82/"
-# Herd injected PHP 8.3 configuration.
-export HERD_PHP_83_INI_SCAN_DIR="/Users/tristan/Library/Application Support/Herd/config/php/83/"
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 

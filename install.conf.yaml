@@ -10,5 +10,9 @@
     ~/.zprofile: zprofile
     ~/.zshenv: zshenv
     ~/.zshrc: zshrc
+    ~/.config/:
+      glob: true
+      path: config/*
+      relink: true
 
 
