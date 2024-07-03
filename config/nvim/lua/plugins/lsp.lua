@@ -48,7 +48,7 @@ return {
 					vim.keymap.set("n", "gq", vim.lsp.buf.code_action, opts)
 					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
           vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
-					vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+					vim.keymap.set("i", "<C-y>", vim.lsp.buf.signature_help, opts)
 					vim.keymap.set("n", "rn", vim.lsp.buf.rename, opts)
 				end,
 			})

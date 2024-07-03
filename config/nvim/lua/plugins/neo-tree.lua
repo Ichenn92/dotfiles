@@ -19,8 +19,8 @@ return {
         require("neo-tree").setup({
       window = {
             mappings = {
-                ["<space>"] = { 
-                    "toggle_node", 
+                ["<space>"] = {
+                    "toggle_node",
                     nowait = true, -- disable `nowait` if you have existing combos starting with this char that you want to use 
                 },
             },
