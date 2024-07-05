@@ -10,9 +10,9 @@ return {
 		-- bridges the gap between mason and lspconfig
 		"williamboman/mason-lspconfig.nvim",
 		lazy = false,
-    opts = {
-      auto_install = true,
-    },
+		opts = {
+			auto_install = true,
+		},
 	},
 	{
 		"neovim/nvim-lspconfig",
@@ -47,7 +47,7 @@ return {
 					vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "gq", vim.lsp.buf.code_action, opts)
 					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-          vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+					vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
 					vim.keymap.set("i", "<C-y>", vim.lsp.buf.signature_help, opts)
 					vim.keymap.set("n", "rn", vim.lsp.buf.rename, opts)
 				end,
@@ -119,10 +119,22 @@ return {
 		end,
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
-
 			{ "j-hui/fidget.nvim", tag = "legacy" },
-			-- support for dart hot reload on save
 			"RobertBrunhage/dart-tools.nvim",
+			{
+				"SmiteshP/nvim-navbuddy",
+				dependencies = {
+					"SmiteshP/nvim-navic",
+					"MunifTanjim/nui.nvim",
+				},
+				opts = { lsp = { auto_attach = true } },
+				config = function()
+					require("nvim-navbuddy").setup({
+						lsp = { auto_attach = true },
+					})
+					vim.api.nvim_set_keymap("n", "<leader>o", ":Navbuddy<CR>", { noremap = true, silent = true })
+				end,
+			},
 		},
 	},
 }
