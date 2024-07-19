@@ -1,22 +1,13 @@
 vim.g.mapleader = " "
 vim.g.background = "light"
 
--- theme
-local themes = { "onedark_vivid", "github_light_high_contrast" }
-local current_theme_index = 1
-_G.switch_theme = function()
-  current_theme_index = 3 - current_theme_index -- Toggle between 1 and 2
-  vim.cmd("colorscheme " .. themes[current_theme_index])
-end
-vim.api.nvim_set_keymap('n', '<c-s>t', ':lua switch_theme()<CR>', { noremap = true, silent = true })
-
-
 -- core
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.updatetime = 50
+vim.opt.hlsearch = true
 
 -- line numbers
 vim.opt.relativenumber = true

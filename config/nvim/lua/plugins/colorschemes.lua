@@ -8,9 +8,19 @@ return {
 		name = "catppuccin",
 		priority = 1000, -- Ensure it loads first
 	},
-	{
-		"projekt0n/github-nvim-theme",
+  {
+    "sontungexpt/witch",
 		lazy = false,
 		priority = 1000,
-	},
+  },
+  {
+    "katawful/kat.nvim",
+		lazy = false,
+		priority = 1000,
+  },
+  {
+    "tiagovla/tokyodark.nvim",
+		lazy = false,
+		priority = 1000,
+  },
 }
