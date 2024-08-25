@@ -28,6 +28,7 @@ return {
 					"lua_ls",
 				},
 			})
+      require'lspconfig'.bashls.setup{}
 
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 

@@ -18,9 +18,9 @@ vim.opt.number = true
 -- vim.keymap.set('n', '<c-j>', ':wincmd j<CR>')
 -- vim.keymap.set('n', '<c-h>', ':wincmd h<CR>')
 -- vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
-vim.keymap.set('n', '<leader>w', ':wincmd w<CR>') -- focus floating window
+vim.keymap.set("n", "<leader>w", ":wincmd w<CR>") -- focus floating window
 
-vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
+vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>")
 vim.wo.number = true
 
 -- Window
@@ -38,7 +38,7 @@ vim.opt.wrap = false
 
 -- search settings
 vim.opt.ignorecase = true
-vim.opt.hlsearch = false
+vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.smartcase = true
 
