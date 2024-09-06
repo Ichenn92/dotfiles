@@ -28,6 +28,9 @@ eval "$(rbenv init - zsh)"
 # Java injected binary.
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
+# Flutter global binaries
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
