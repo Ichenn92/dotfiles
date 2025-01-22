@@ -43,10 +43,35 @@ return {
 							handle_confirmation -- Function to call with the user's response
 						)
 					end,
+					system_open = function(state)
+						local node = state.tree:get_node()
+						local path = node:get_id()
+
+						if vim.fn.has("mac") == 1 then
+							-- macOS: open file in default application
+							vim.fn.jobstart({ "open", path }, { detach = true })
+						elseif vim.fn.has("unix") == 1 then
+							-- Linux: open file in default application
+							vim.fn.jobstart({ "xdg-open", path }, { detach = true })
+						elseif vim.fn.has("win32") == 1 then
+							-- Windows: open folder in explorer
+							local p
+							local lastSlashIndex = path:match("^.+()\\[^\\]*$") -- Match the last slash and everything before it
+							if lastSlashIndex then
+								p = path:sub(1, lastSlashIndex - 1) -- Extract substring before the last slash
+							else
+								p = path -- If no slash found, return original path
+							end
+							vim.cmd("silent !start explorer " .. p)
+						else
+							print("Unsupported operating system")
+						end
+					end,
 				},
 				window = {
 					mappings = {
 						["d"] = "delete", -- Map the delete command to use the trash
+						["oo"] = "system_open",
 					},
 				},
 			},

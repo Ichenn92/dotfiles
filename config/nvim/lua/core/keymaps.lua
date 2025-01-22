@@ -2,9 +2,13 @@ local keymap = vim.keymap -- for conciseness
 
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>")
+keymap.set("n", "<leader>h", ":nohlsearch<CR>")
 
 -- delete single character without copying into register
 keymap.set("n", "x", '"_x')
+
+-- focus floating window
+keymap.set("n", "<leader>w", ":wincmd w<CR>")
 
 -- window management
 keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
@@ -21,5 +25,5 @@ keymap.set("n", "<leader>tp", ":tabp<CR>") --  go to previous tab
 keymap.set("n", "<leader>q", ":bp<bar>sp<bar>bn<bar>bd<CR>")
 
 -- move lines
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+keymap.set("v", "K", ":m '<-2<CR>gv=gv")

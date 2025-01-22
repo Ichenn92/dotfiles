@@ -19,6 +19,7 @@ return {
 
 		require("telescope").setup({
 			defaults = require("telescope.themes").get_dropdown({
+				file_ignore_patterns = { "%.g%.dart$", "%.freezed%.dart$" },
 				file_sorter = require("telescope.sorters").get_fzy_sorter,
 				file_previewer = require("telescope.previewers").vim_buffer_cat.new,
 				grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,

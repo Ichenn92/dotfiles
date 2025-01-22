@@ -1,4 +1,5 @@
 return {
+	-- Mason setup for managing LSP servers and tools
 	{
 		"williamboman/mason.nvim",
 		lazy = false,
@@ -6,85 +7,157 @@ return {
 			require("mason").setup()
 		end,
 	},
+	-- Mason-lspconfig setup to automatically install and manage LSPs
 	{
 		"williamboman/mason-lspconfig.nvim",
 		lazy = false,
-		ensure_installed = { "tsserver", "eslint_d", "prettier" },
 		opts = {
+			ensure_installed = { "astro", "ts_ls", "lua_ls", "bashls" },
 			auto_install = true,
 		},
 	},
+	-- Main LSP configuration
 	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
-			local lsp_config = require("lspconfig")
+			local lspconfig = require("lspconfig")
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local cmp = require("cmp")
+			local luasnip = require("luasnip")
+			local has_copilot, copilot_suggestion = pcall(require, "copilot.suggestion")
 
-			-- Initialize Mason and Mason-Lspconfig with your LSP servers
-			require("mason").setup()
-			require("mason-lspconfig").setup({
-				ensure_installed = { "astro", "ts_ls", "lua_ls", "bashls" },
+			-- Super Tab integration
+			cmp.setup({
+				mapping = {
+					["<Tab>"] = cmp.mapping(function(fallback)
+						local col = vim.fn.col(".") - 1
+						if has_copilot and copilot_suggestion.is_visible() then
+							copilot_suggestion.accept()
+						elseif cmp.visible() then
+							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
+						elseif col == 0 or vim.fn.getline("."):sub(col, col):match("%s") then
+							fallback()
+						else
+							cmp.complete()
+						end
+					end, { "i", "s" }),
+				},
+				sources = {
+					{ name = "nvim_lsp" },
+					{ name = "luasnip" },
+					{ name = "buffer" },
+					{ name = "path" },
+				},
+				snippet = {
+					expand = function(args)
+						luasnip.lsp_expand(args.body)
+					end,
+				},
 			})
 
-			-- Key mappings for diagnostics
-			vim.keymap.set("n", "<leader>dh", vim.diagnostic.open_float)
-			vim.keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev)
-			vim.keymap.set("n", "<leader>dn", vim.diagnostic.goto_next)
-			vim.keymap.set("n", "<leader>dl", vim.diagnostic.setqflist)
+			-- Helper function for mapping keys
+			local function on_attach(_, bufnr)
+				local buf_set_keymap = function(mode, lhs, rhs, desc)
+					vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+				end
 
-			-- Attach diagnostics and LSP settings
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-				callback = function(ev)
-					local opts = { buffer = ev.buf }
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-					vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
-					vim.keymap.set("n", "gq", vim.lsp.buf.code_action, opts)
-					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-					vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
-					vim.keymap.set("i", "<C-y>", vim.lsp.buf.signature_help, opts)
-					vim.keymap.set("n", "rn", vim.lsp.buf.rename, opts)
-				end,
+				-- Diagnostic mappings
+				buf_set_keymap("n", "<leader>dh", vim.diagnostic.open_float, "Hover Diagnostics")
+				buf_set_keymap("n", "<leader>dp", vim.diagnostic.goto_prev, "Previous Diagnostic")
+				buf_set_keymap("n", "<leader>dn", vim.diagnostic.goto_next, "Next Diagnostic")
+				-- buf_set_keymap("n", "<leader>dl", vim.diagnostic.setqflist, "Diagnostic List")
+
+				local function suppress_diagnostic_info()
+					local original_notify = vim.notify
+					vim.notify = function(msg, log_level, _opts)
+						-- Suppress the specific info message
+						if msg and msg:match("Functional providers must receive") then
+							return
+						end
+						-- Pass other messages through
+						original_notify(msg, log_level)
+					end
+
+					-- Call the diagnostic function
+					local ok = pcall(vim.diagnostic.setqflist)
+
+					-- Restore original notify
+					vim.notify = original_notify
+
+					-- Handle errors if `pcall` fails
+					if not ok then
+						vim.notify("Failed to set diagnostics in qflist", vim.log.levels.ERROR)
+					end
+				end
+				buf_set_keymap("n", "<leader>dl", suppress_diagnostic_info, "Diagnostic List")
+
+				-- LSP-specific mappings
+				buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to Definition")
+				buf_set_keymap("n", "gh", vim.lsp.buf.hover, "Hover Documentation")
+				buf_set_keymap("n", "gq", vim.lsp.buf.code_action, "Code Action")
+				buf_set_keymap("n", "gr", vim.lsp.buf.references, "References")
+				buf_set_keymap("n", "gs", vim.lsp.buf.signature_help, "Signature Help")
+				buf_set_keymap("i", "<C-y>", vim.lsp.buf.signature_help, "Signature Help Insert")
+				buf_set_keymap("n", "rn", vim.lsp.buf.rename, "Rename Symbol")
+			end
+
+			-- Configure diagnostics globally
+			vim.diagnostic.config({
+				virtual_text = { prefix = "●" },
+				float = { border = "rounded" },
+				severity_sort = true,
 			})
 
-			-- General diagnostics configuration
-			vim.diagnostic.config({ virtual_text = true, signs = false })
-
-			-- Dart LSP setup with excluded folders
-			local dartExcludedFolders = {
+			-- Dart configuration with custom excluded folders
+			local dart_excluded_folders = {
 				vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
 				vim.fn.expand("$HOME/.pub-cache"),
 				vim.fn.expand("/opt/homebrew/"),
 				vim.fn.expand("$HOME/tools/flutter/"),
 			}
 
-			lsp_config.dartls.setup({
+			lspconfig.dartls.setup({
 				capabilities = capabilities,
 				cmd = { "dart", "language-server", "--protocol=lsp" },
 				filetypes = { "dart" },
 				init_options = { suggestFromUnimportedLibraries = true },
 				settings = {
 					dart = {
-						analysisExcludedFolders = dartExcludedFolders,
+						analysisExcludedFolders = dart_excluded_folders,
 						updateImportsOnRename = true,
 					},
 				},
+				on_attach = on_attach,
 			})
 
-			-- Additional LSP Configurations
-			lsp_config.astro.setup({ capabilities = capabilities })
-			lsp_config.ts_ls.setup({ capabilities = capabilities })
-			lsp_config.lua_ls.setup({
+			-- General LSP servers setup
+			local servers = { "astro", "ts_ls", "lua_ls", "bashls" }
+			for _, server in ipairs(servers) do
+				lspconfig[server].setup({
+					capabilities = capabilities,
+					on_attach = on_attach,
+				})
+			end
+
+			-- Lua-specific settings
+			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 				settings = {
-					Lua = { diagnostics = { globals = { "vim" } } },
+					Lua = {
+						diagnostics = { globals = { "vim" } },
+						workspace = { checkThirdParty = false },
+					},
 				},
+				on_attach = on_attach,
 			})
 
-			-- Fidget configuration for LSP progress
+			-- Progress indicator for LSP
 			require("fidget").setup({})
-			-- Navbuddy configuration for better navigation in LSP
+
+			-- Navbuddy for better navigation in LSP
 			require("nvim-navbuddy").setup({ lsp = { auto_attach = true } })
 			vim.api.nvim_set_keymap("n", "<leader>o", ":Navbuddy<CR>", { noremap = true, silent = true })
 		end,
