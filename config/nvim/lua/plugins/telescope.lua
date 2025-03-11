@@ -17,6 +17,9 @@ return {
 		vim.keymap.set("n", "<leader>ts", builtin.lsp_document_symbols, {})
 		vim.keymap.set("n", "<leader>tf", builtin.find_files, {})
 
+		-- 🔥 Add this line to bind <leader>se to open Telescope emoji picker
+    vim.keymap.set("n", "<leader>te", "<cmd>Telescope emoji<cr>", { desc = "Show emoji search" })
+
 		require("telescope").setup({
 			defaults = require("telescope.themes").get_dropdown({
 				file_ignore_patterns = { "%.g%.dart$", "%.freezed%.dart$" },
@@ -40,12 +43,20 @@ return {
 						codeactions = false,
 					},
 				},
+				emoji = {
+					action = function(emoji)
+						vim.fn.setreg("*", emoji.value)
+						print([[Press p or "*p to paste this emoji]] .. emoji.value)
+						vim.api.nvim_put({ emoji.value }, "c", false, true)
+					end,
+				},
 			},
 		})
 
 		require("telescope").load_extension("fzy_native")
 		require("telescope").load_extension("live_grep_args")
 		require("telescope").load_extension("ui-select")
+		require("telescope").load_extension("emoji")
 	end,
 
 	dependencies = {
@@ -53,5 +64,6 @@ return {
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		-- Allows using telescope for things like code action (handy for searching)
 		"nvim-telescope/telescope-ui-select.nvim",
+		"xiyaowong/telescope-emoji.nvim",
 	},
 }

@@ -7,7 +7,6 @@
     ~/.ssh/config:
         path: ssh/config
         create: true
-    ~/.tmux.conf: tmux.conf
     ~/.zprofile: zprofile
     ~/.zshenv: zshenv
     ~/.zshrc: zshrc
@@ -15,5 +14,3 @@
       glob: true
       path: config/*
       relink: true
-
-

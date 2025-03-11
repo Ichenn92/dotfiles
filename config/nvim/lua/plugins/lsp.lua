@@ -68,31 +68,7 @@ return {
 				buf_set_keymap("n", "<leader>dh", vim.diagnostic.open_float, "Hover Diagnostics")
 				buf_set_keymap("n", "<leader>dp", vim.diagnostic.goto_prev, "Previous Diagnostic")
 				buf_set_keymap("n", "<leader>dn", vim.diagnostic.goto_next, "Next Diagnostic")
-				-- buf_set_keymap("n", "<leader>dl", vim.diagnostic.setqflist, "Diagnostic List")
-
-				local function suppress_diagnostic_info()
-					local original_notify = vim.notify
-					vim.notify = function(msg, log_level, _opts)
-						-- Suppress the specific info message
-						if msg and msg:match("Functional providers must receive") then
-							return
-						end
-						-- Pass other messages through
-						original_notify(msg, log_level)
-					end
-
-					-- Call the diagnostic function
-					local ok = pcall(vim.diagnostic.setqflist)
-
-					-- Restore original notify
-					vim.notify = original_notify
-
-					-- Handle errors if `pcall` fails
-					if not ok then
-						vim.notify("Failed to set diagnostics in qflist", vim.log.levels.ERROR)
-					end
-				end
-				buf_set_keymap("n", "<leader>dl", suppress_diagnostic_info, "Diagnostic List")
+				buf_set_keymap("n", "<leader>dl", vim.diagnostic.setqflist, "Diagnostic List")
 
 				-- LSP-specific mappings
 				buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to Definition")

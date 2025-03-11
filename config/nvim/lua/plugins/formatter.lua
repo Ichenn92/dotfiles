@@ -5,27 +5,27 @@ return {
 			lua = {
 				require("formatter.filetypes.lua").stylua,
 			},
-      markdown = {
-        require("formatter.filetypes.markdown").prettier,
-      },
-      javascript = {
-        require("formatter.filetypes.javascript").prettier,
-      },
+			-- markdown = {
+			-- 	require("formatter.filetypes.markdown").prettier,
+			-- },
+			-- javascript = {
+			--   require("formatter.filetypes.javascript").prettier,
+			-- },
 			typescript = {
 				require("formatter.filetypes.typescript").prettier,
 			},
 			dart = {
 				require("formatter.filetypes.dart").dartformat,
 			},
-      json = {
-        require("formatter.filetypes.json").prettier,
-      },
-      yaml = {
-        require("formatter.filetypes.yaml").prettier,
-      },
-      sh = {
-        require("formatter.filetypes.sh").shfmt,
-      },
+			json = {
+				require("formatter.filetypes.json").prettier,
+			},
+			yaml = {
+				require("formatter.filetypes.yaml").prettier,
+			},
+			sh = {
+				require("formatter.filetypes.sh").shfmt,
+			},
 			["*"] = {
 				require("formatter.filetypes.any").remove_trailing_whitespace,
 			},
