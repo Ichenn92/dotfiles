@@ -1,16 +1,11 @@
 return {
 	"mhartington/formatter.nvim",
+	-- event = "BufWritePre",
 	config = function()
 		local settings = {
 			lua = {
 				require("formatter.filetypes.lua").stylua,
 			},
-			-- markdown = {
-			-- 	require("formatter.filetypes.markdown").prettier,
-			-- },
-			-- javascript = {
-			--   require("formatter.filetypes.javascript").prettier,
-			-- },
 			typescript = {
 				require("formatter.filetypes.typescript").prettier,
 			},

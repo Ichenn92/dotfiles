@@ -1,6 +1,10 @@
 return {
 	{
 		"numToStr/Comment.nvim",
+		keys = { "gcc", "gc" }, -- only load when you press the comment mapping
+		config = function()
+			require("Comment").setup()
+		end,
 		opts = {
 			-- add any options here
 		},

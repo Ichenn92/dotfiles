@@ -10,14 +10,8 @@ vim.opt.updatetime = 50
 vim.opt.hlsearch = true
 
 -- line numbers
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 vim.opt.number = true
-
--- Navigate vim panes better
--- vim.keymap.set('n', '<c-k>', ':wincmd k<CR>')
--- vim.keymap.set('n', '<c-j>', ':wincmd j<CR>')
--- vim.keymap.set('n', '<c-h>', ':wincmd h<CR>')
--- vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
 vim.wo.number = true
 
 -- Window
@@ -40,7 +34,7 @@ vim.opt.incsearch = true
 vim.smartcase = true
 
 -- cursor line
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 -- vim.opt.cursorcolumn = true
 vim.opt.colorcolumn = "80"
 
@@ -60,3 +54,19 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 vim.opt.iskeyword:append("-")
+
+-- PERFORMANCE TWEAKS FOR WARP
+vim.opt.lazyredraw = true -- Don't redraw during macro/ex
+vim.opt.ttyfast = true -- Assume fast terminal
+vim.opt.redrawtime = 10000 -- Increase max redraw time
+
+-- Dynamically toggle line numbers:
+-- Shows absolute + relative numbers in normal mode when focused.
+-- Hides relative numbers (only absolute) in insert mode or on focus loss.
+vim.cmd([[
+  augroup numbertoggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
+  augroup END
+]])

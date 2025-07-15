@@ -1,41 +1,30 @@
 return {
-	-- Mason setup for managing LSP servers and tools
-	{
-		"williamboman/mason.nvim",
-		lazy = false,
-		config = function()
-			require("mason").setup()
-		end,
-	},
-	-- Mason-lspconfig setup to automatically install and manage LSPs
-	{
-		"williamboman/mason-lspconfig.nvim",
-		lazy = false,
-		opts = {
-			ensure_installed = { "astro", "ts_ls", "lua_ls", "bashls" },
-			auto_install = true,
-		},
-	},
-	-- Main LSP configuration
 	{
 		"neovim/nvim-lspconfig",
-		lazy = false,
+		-- only load when editing Dart/TS files
+		ft = { "dart", "typescript", "typescriptreact" },
 		config = function()
 			local lspconfig = require("lspconfig")
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local cmp_nvim_lsp = require("cmp_nvim_lsp")
+			local capabilities = cmp_nvim_lsp.default_capabilities()
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			local has_copilot, copilot_suggestion = pcall(require, "copilot.suggestion")
 
-			-- Super Tab integration
+			-- super-tab / snippet / copilot integration
 			cmp.setup({
+				snippet = {
+					expand = function(args)
+						luasnip.lsp_expand(args.body)
+					end,
+				},
 				mapping = {
 					["<Tab>"] = cmp.mapping(function(fallback)
 						local col = vim.fn.col(".") - 1
 						if has_copilot and copilot_suggestion.is_visible() then
 							copilot_suggestion.accept()
 						elseif cmp.visible() then
-							cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+							cmp.select_next_item()
 						elseif luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
 						elseif col == 0 or vim.fn.getline("."):sub(col, col):match("%s") then
@@ -51,100 +40,82 @@ return {
 					{ name = "buffer" },
 					{ name = "path" },
 				},
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
-					end,
-				},
 			})
 
-			-- Helper function for mapping keys
+			-- common on_attach & diagnostics
 			local function on_attach(_, bufnr)
-				local buf_set_keymap = function(mode, lhs, rhs, desc)
-					vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+				local bufmap = function(mode, lhs, rhs, desc)
+					vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc, silent = true })
 				end
-
-				-- Diagnostic mappings
-				buf_set_keymap("n", "<leader>dh", vim.diagnostic.open_float, "Hover Diagnostics")
-				buf_set_keymap("n", "<leader>dp", vim.diagnostic.goto_prev, "Previous Diagnostic")
-				buf_set_keymap("n", "<leader>dn", vim.diagnostic.goto_next, "Next Diagnostic")
-				buf_set_keymap("n", "<leader>dl", vim.diagnostic.setqflist, "Diagnostic List")
-
-				-- LSP-specific mappings
-				buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to Definition")
-				buf_set_keymap("n", "gh", vim.lsp.buf.hover, "Hover Documentation")
-				buf_set_keymap("n", "gq", vim.lsp.buf.code_action, "Code Action")
-				buf_set_keymap("n", "gr", vim.lsp.buf.references, "References")
-				buf_set_keymap("n", "gs", vim.lsp.buf.signature_help, "Signature Help")
-				buf_set_keymap("i", "<C-y>", vim.lsp.buf.signature_help, "Signature Help Insert")
-				buf_set_keymap("n", "rn", vim.lsp.buf.rename, "Rename Symbol")
+				vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Hover Documentation" })
+				bufmap("n", "gd", vim.lsp.buf.definition, "Go to Definition")
+				bufmap("n", "gq", vim.lsp.buf.code_action, "Code Action")
+				bufmap("n", "gr", vim.lsp.buf.references, "References")
+				bufmap("n", "gs", vim.lsp.buf.signature_help, "Signature Help")
+				bufmap("n", "rn", vim.lsp.buf.rename, "Rename Symbol")
+				bufmap("i", "<C-y>", vim.lsp.buf.signature_help, "Signature Help Insert")
+				bufmap("n", "<leader>dh", vim.diagnostic.open_float, "Hover Diagnostics")
+				bufmap("n", "<leader>dp", vim.diagnostic.goto_prev, "Previous Diagnostic")
+				bufmap("n", "<leader>dn", vim.diagnostic.goto_next, "Next Diagnostic")
+				bufmap("n", "<leader>dl", vim.diagnostic.setqflist, "Diagnostic List")
 			end
 
-			-- Configure diagnostics globally
 			vim.diagnostic.config({
 				virtual_text = { prefix = "●" },
 				float = { border = "rounded" },
 				severity_sort = true,
 			})
 
-			-- Dart configuration with custom excluded folders
-			local dart_excluded_folders = {
-				vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
-				vim.fn.expand("$HOME/.pub-cache"),
-				vim.fn.expand("/opt/homebrew/"),
-				vim.fn.expand("$HOME/tools/flutter/"),
+			-- only the two servers you actually use:
+			local servers = {
+				ts_ls = {
+					filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+					init_options = { hostInfo = "neovim", preferences = { disableSuggestions = true } },
+					flags = { debounce_text_changes = 200 },
+				},
+				dartls = {
+					filetypes = { "dart" },
+					cmd = { "dart", "language-server", "--protocol=lsp" },
+					init_options = { suggestFromUnimportedLibraries = true },
+					flags = { debounce_text_changes = 200 },
+					settings = {
+						dart = {
+							updateImportsOnRename = true,
+							analysisExcludedFolders = {
+								vim.fn.expand("$HOME/.pub-cache"),
+								vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
+								vim.fn.expand("$HOME/tools/flutter"),
+								"/opt/homebrew/",
+							},
+						},
+					},
+				},
 			}
 
-			lspconfig.dartls.setup({
-				capabilities = capabilities,
-				cmd = { "dart", "language-server", "--protocol=lsp" },
-				filetypes = { "dart" },
-				init_options = { suggestFromUnimportedLibraries = true },
-				settings = {
-					dart = {
-						analysisExcludedFolders = dart_excluded_folders,
-						updateImportsOnRename = true,
-					},
-				},
-				on_attach = on_attach,
-			})
-
-			-- General LSP servers setup
-			local servers = { "astro", "ts_ls", "lua_ls", "bashls" }
-			for _, server in ipairs(servers) do
-				lspconfig[server].setup({
+			for name, opts in pairs(servers) do
+				lspconfig[name].setup(vim.tbl_deep_extend("force", {
 					capabilities = capabilities,
 					on_attach = on_attach,
-				})
+					handlers = {
+						["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+						["textDocument/signatureHelp"] = vim.lsp.with(
+							vim.lsp.handlers.signature_help,
+							{ border = "rounded" }
+						),
+					},
+				}, opts))
 			end
 
-			-- Lua-specific settings
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-				settings = {
-					Lua = {
-						diagnostics = { globals = { "vim" } },
-						workspace = { checkThirdParty = false },
-					},
-				},
-				on_attach = on_attach,
-			})
-
-			-- Progress indicator for LSP
-			require("fidget").setup({})
-
-			-- Navbuddy for better navigation in LSP
+			-- lightweight progress indicator & navbuddy if you like:
+			require("fidget").setup({ window = { blend = 0 }, timer = { spinner_rate = 200 } })
 			require("nvim-navbuddy").setup({ lsp = { auto_attach = true } })
-			vim.api.nvim_set_keymap("n", "<leader>o", ":Navbuddy<CR>", { noremap = true, silent = true })
+			vim.keymap.set("n", "<leader>o", ":Navbuddy<CR>", { noremap = true, silent = true })
 		end,
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			{ "j-hui/fidget.nvim", tag = "legacy" },
 			"RobertBrunhage/dart-tools.nvim",
-			{
-				"SmiteshP/nvim-navbuddy",
-				dependencies = { "SmiteshP/nvim-navic", "MunifTanjim/nui.nvim" },
-			},
+			{ "SmiteshP/nvim-navbuddy", dependencies = { "SmiteshP/nvim-navic", "MunifTanjim/nui.nvim" } },
 		},
 	},
 }

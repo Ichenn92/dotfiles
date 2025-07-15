@@ -1,0 +1,4 @@
+ruleDirs:
+- /Users/tristan/.dotfiles/rules
+testConfigs:
+- testDir: /Users/tristan/.dotfiles/rule-tests

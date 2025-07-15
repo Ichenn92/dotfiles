@@ -1,5 +1,8 @@
 return {
 	"lewis6991/gitsigns.nvim",
+	on_attach = function(bufnr)
+		require("gitsigns").toggle_current_line_blame(false) -- turn off blame by default
+	end,
 	config = function()
 		require("gitsigns").setup({
 			on_attach = function(bufnr)
