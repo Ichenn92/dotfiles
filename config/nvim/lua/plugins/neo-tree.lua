@@ -24,23 +24,26 @@ return {
 						local path = node:get_id()
 						local inputs = require("neo-tree.ui.inputs")
 
-						-- Function to handle the confirmation
-						local function handle_confirmation(choice)
-							if choice then
-								-- Use trash instead of rm
-								vim.fn.system({ "trash", vim.fn.fnameescape(path) })
-								-- Refresh Neo-tree to reflect the changes
-								require("neo-tree.sources.manager").refresh(state.name)
-								print("File moved to trash: " .. path)
-							else
-								print("Deletion canceled")
-							end
-						end
-
-						-- Show confirmation dialog
+						-- Show confirmation dialog with updated API
 						inputs.confirm(
-							"Are you sure you want to delete this file?", -- Prompt
-							handle_confirmation -- Function to call with the user's response
+							"Are you sure you want to trash " .. vim.fn.fnamemodify(path, ":t") .. "?",
+							function(confirmed)
+								if confirmed then
+									-- Use trash command with proper shell escaping
+									local cmd = "trash " .. vim.fn.shellescape(path)
+									local result = vim.fn.system(cmd)
+									
+									if vim.v.shell_error == 0 then
+										-- Refresh Neo-tree to reflect the changes
+										require("neo-tree.sources.manager").refresh(state.name)
+										vim.notify("File moved to trash: " .. vim.fn.fnamemodify(path, ":t"))
+									else
+										vim.notify("Failed to trash file: " .. vim.trim(result or ""), vim.log.levels.ERROR)
+									end
+								else
+									vim.notify("Deletion canceled")
+								end
+							end
 						)
 					end,
 					system_open = function(state)

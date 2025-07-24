@@ -18,9 +18,41 @@ require("lazy").setup({
     -- import your plugins
     { import = "plugins" },
   },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
+  -- Performance optimized settings
+  install = { 
+    colorscheme = { "habamax" },
+    missing = false, -- Don't automatically install missing plugins
+  },
+  -- Reduce background checking frequency to save CPU
+  checker = { 
+    enabled = true, 
+    concurrency = 1, -- Reduce concurrent operations
+    notify = false,  -- Don't show notifications
+    frequency = 3600 -- Check every hour instead of every 10 minutes
+  },
+  -- Performance tweaks
+  change_detection = {
+    enabled = true,
+    notify = false, -- Don't show notifications for changes
+  },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    reset_packpath = true,
+    rtp = {
+      reset = true,
+      paths = {},
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
 })

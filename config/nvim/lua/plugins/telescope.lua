@@ -20,11 +20,9 @@ return {
 				file_previewer = require("telescope.previewers").vim_buffer_cat.new,
 				grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
 				qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
-				mappings = {
-					i = {
-						["<C-x>"] = false,
-					},
-				},
+			},
+			preview = {
+				treesitter = true,
 			},
 			extensions = {
 				fzy_native = {
@@ -42,7 +40,6 @@ return {
 				},
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown({
-						-- even more opts
 						specific_opts = {
 							codeactions = false,
 						},

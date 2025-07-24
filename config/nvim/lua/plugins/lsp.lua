@@ -2,7 +2,7 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		-- only load when editing Dart/TS files
-		ft = { "dart", "typescript", "typescriptreact" },
+		ft = { "dart", "typescript", "typescriptreact", "html", "css" },
 		config = function()
 			local lspconfig = require("lspconfig")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -66,27 +66,53 @@ return {
 				severity_sort = true,
 			})
 
-			-- only the two servers you actually use:
+			-- Optimized server configurations with performance tweaks
 			local servers = {
+				cssls = {
+					autostart = false, -- Start manually when needed
+					flags = { debounce_text_changes = 500 }, -- Increased debounce
+				},
+				html = {
+					filetypes = { "html" },
+					autostart = false, -- Start manually when needed
+					init_options = { hostInfo = "neovim", preferences = { disableSuggestions = true } },
+					flags = { debounce_text_changes = 500 }, -- Increased debounce
+				},
 				ts_ls = {
 					filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-					init_options = { hostInfo = "neovim", preferences = { disableSuggestions = true } },
-					flags = { debounce_text_changes = 200 },
+					-- autostart = true, -- Keep TypeScript LSP on since it's frequently used
+					init_options = { 
+						hostInfo = "neovim", 
+						preferences = { 
+							disableSuggestions = true,
+							-- Reduce memory usage
+							maxTsServerMemory = 3072,
+						}
+					},
+					flags = { debounce_text_changes = 500 }, -- Increased debounce
 				},
 				dartls = {
 					filetypes = { "dart" },
 					cmd = { "dart", "language-server", "--protocol=lsp" },
+					-- autostart = true, -- Keep Dart LSP on since it's frequently used
 					init_options = { suggestFromUnimportedLibraries = true },
-					flags = { debounce_text_changes = 200 },
+					flags = { debounce_text_changes = 500 }, -- Increased debounce
 					settings = {
 						dart = {
 							updateImportsOnRename = true,
+							-- Performance: Exclude more folders from analysis
 							analysisExcludedFolders = {
 								vim.fn.expand("$HOME/.pub-cache"),
 								vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
 								vim.fn.expand("$HOME/tools/flutter"),
+								vim.fn.expand("$HOME/Library/Developer/Xcode"),
 								"/opt/homebrew/",
+								"/usr/local/",
+								"**/node_modules",
+								"**/.git",
 							},
+							-- Limit concurrent analysis
+							maxFileSize = 4194304, -- 4MB limit
 						},
 					},
 				},

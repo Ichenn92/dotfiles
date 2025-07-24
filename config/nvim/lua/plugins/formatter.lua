@@ -38,7 +38,7 @@ return {
 			else
 				vim.lsp.buf.format({
 					filter = function(client)
-						local clients = vim.lsp.get_active_clients()
+						local clients = vim.lsp.get_clients()
 						local formattingDartWithDcmls = false
 
 						-- Check if dcmls is attached

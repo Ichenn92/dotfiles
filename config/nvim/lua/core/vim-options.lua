@@ -55,10 +55,15 @@ vim.opt.splitbelow = true
 
 vim.opt.iskeyword:append("-")
 
--- PERFORMANCE TWEAKS FOR WARP
+-- PERFORMANCE TWEAKS FOR WARP AND MACOS
 vim.opt.lazyredraw = true -- Don't redraw during macro/ex
 vim.opt.ttyfast = true -- Assume fast terminal
 vim.opt.redrawtime = 10000 -- Increase max redraw time
+vim.opt.timeout = true
+vim.opt.timeoutlen = 300 -- Faster key sequence timeout
+vim.opt.ttimeoutlen = 10 -- Faster key code timeout
+vim.opt.synmaxcol = 200 -- Only syntax highlight first 200 columns
+vim.opt.maxmempattern = 2000 -- Increase max memory for pattern matching
 
 -- Dynamically toggle line numbers:
 -- Shows absolute + relative numbers in normal mode when focused.
