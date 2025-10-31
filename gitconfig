@@ -5,9 +5,19 @@
 	name = IchennDev
 	email = tristan.horler@gmail.com
 [core]
-	editor = vim
+	editor = nvim
+  pager = delta
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  dark = true      # or light = true, or omit for auto-detection
+[merge]
+  conflictStyle = zdiff3
+[diff]
+	external = difft --color=always --syntax-highlight=off

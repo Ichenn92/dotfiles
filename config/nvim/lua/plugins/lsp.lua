@@ -4,7 +4,6 @@ return {
 		-- only load when editing Dart/TS files
 		ft = { "dart", "typescript", "typescriptreact", "html", "css" },
 		config = function()
-			local lspconfig = require("lspconfig")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			local capabilities = cmp_nvim_lsp.default_capabilities()
 			local cmp = require("cmp")
@@ -68,6 +67,18 @@ return {
 
 			-- Optimized server configurations with performance tweaks
 			local servers = {
+				eslint = {
+					filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+					on_attach = function(client, bufnr)
+						on_attach(client, bufnr)
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							buffer = bufnr,
+							callback = function()
+								pcall(vim.cmd, "EslintFixAll")
+							end,
+						})
+					end,
+				},
 				cssls = {
 					autostart = false, -- Start manually when needed
 					flags = { debounce_text_changes = 500 }, -- Increased debounce
@@ -119,7 +130,7 @@ return {
 			}
 
 			for name, opts in pairs(servers) do
-				lspconfig[name].setup(vim.tbl_deep_extend("force", {
+				local config = vim.tbl_deep_extend("force", {
 					capabilities = capabilities,
 					on_attach = on_attach,
 					handlers = {
@@ -129,7 +140,9 @@ return {
 							{ border = "rounded" }
 						),
 					},
-				}, opts))
+				}, opts)
+				vim.lsp.config(name, config)
+				vim.lsp.enable(name)
 			end
 
 			-- lightweight progress indicator & navbuddy if you like:

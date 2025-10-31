@@ -3,6 +3,7 @@ return {
 	cmd = "Copilot",
 	event = "InsertEnter",
 	config = function()
+		vim.lsp.config('copilot', { enabled = false })
 		require("copilot").setup({
 			panel = {
 				enabled = false,

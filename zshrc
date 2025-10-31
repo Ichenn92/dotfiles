@@ -32,10 +32,6 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
 [[ -f /Users/tristan/.dart-cli-completion/zsh-config.zsh ]] && . /Users/tristan/.dart-cli-completion/zsh-config.zsh || true
@@ -46,24 +42,6 @@ if [ -f '/Users/tristan/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tristan
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/tristan/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tristan/google-cloud-sdk/completion.zsh.inc'; fi
-
-# history setup
-# HISTFILE=$HOME/.zhistory
-# SAVEHIST=1000
-# HISTSIZE=999
-# setopt share_history
-# setopt hist_expire_dups_first
-# setopt hist_ignore_dups
-# setopt hist_verify
-
-# bindkey "^[[A" history-search-backward
-# bindkey "^[[B" history-search-forward
-
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Set PATH, MANPATH, etc., for Homebrew.
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 kill_port() {
     local port=$1
@@ -81,3 +59,12 @@ kill_port() {
         echo "Port $port has been successfully killed."
     fi
 }
+
+# Homebrew
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
