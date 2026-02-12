@@ -13,7 +13,6 @@ return {
 		vim.keymap.set("n", "<leader>tf", builtin.find_files, {})
 
 		require("telescope").setup({
-			-- defaults = require("telescope.themes").get_dropdown({
 			defaults = {
 				file_ignore_patterns = { "%.g%.dart$", "%.freezed%.dart$" },
 				file_sorter = require("telescope.sorters").get_fzy_sorter,

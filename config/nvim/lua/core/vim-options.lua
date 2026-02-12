@@ -1,77 +1,40 @@
-vim.g.mapleader = " "
-vim.g.background = "light"
+vim.cmd("let g:netrw_liststyle = 3")
 
--- core
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
-vim.opt.updatetime = 50
-vim.opt.hlsearch = true
+local opt = vim.opt
 
 -- line numbers
-vim.opt.relativenumber = false
-vim.opt.number = true
-vim.wo.number = true
+opt.relativenumber = true
+opt.number = true
 
--- Window
-vim.opt.scrolloff = 8
+-- tabs & indentation
+opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
+opt.shiftwidth = 2 -- 2 spaces for indent width
+opt.expandtab = true -- expand tab to spaces
+opt.autoindent = true -- copy indent from current line when starting new one
 
--- tabs && indentation
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.autoindent = true
-vim.opt.smartindent = false
-
--- line wrapping
-vim.opt.wrap = false
+opt.wrap = false
 
 -- search settings
-vim.opt.ignorecase = true
-vim.opt.hlsearch = true
-vim.opt.incsearch = true
-vim.smartcase = true
+opt.ignorecase = true -- ignore case when searching
+opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
 
--- cursor line
-vim.opt.cursorline = false
--- vim.opt.cursorcolumn = true
-vim.opt.colorcolumn = "80"
+opt.cursorline = true
 
--- appearance
-vim.opt.termguicolors = true
-vim.opt.background = "dark"
-vim.opt.signcolumn = "yes"
+-- turn on termguicolors for tokyonight colorscheme to work
+-- (have to use iterm2 or any other true color terminal)
+opt.termguicolors = true
+opt.background = "dark" -- colorschemes that can be light or dark will be made dark
+opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 
 -- backspace
-vim.opt.backspace = "indent,eol,start"
+opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
 -- clipboard
-vim.opt.clipboard:append("unnamedplus")
+opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 
--- split window
-vim.opt.splitright = true
-vim.opt.splitbelow = true
+-- split windows
+opt.splitright = true -- split vertical window to the right
+opt.splitbelow = true -- split horizontal window to the bottom
 
-vim.opt.iskeyword:append("-")
-
--- PERFORMANCE TWEAKS FOR WARP AND MACOS
-vim.opt.lazyredraw = true -- Don't redraw during macro/ex
-vim.opt.ttyfast = true -- Assume fast terminal
-vim.opt.redrawtime = 10000 -- Increase max redraw time
-vim.opt.timeout = true
-vim.opt.timeoutlen = 300 -- Faster key sequence timeout
-vim.opt.ttimeoutlen = 10 -- Faster key code timeout
-vim.opt.synmaxcol = 200 -- Only syntax highlight first 200 columns
-vim.opt.maxmempattern = 2000 -- Increase max memory for pattern matching
-
--- Dynamically toggle line numbers:
--- Shows absolute + relative numbers in normal mode when focused.
--- Hides relative numbers (only absolute) in insert mode or on focus loss.
-vim.cmd([[
-  augroup numbertoggle
-    autocmd!
-    autocmd BufEnter,FocusGained,InsertLeave * set number relativenumber
-    autocmd BufLeave,FocusLost,InsertEnter   * set number norelativenumber
-  augroup END
-]])
+-- turn off swapfile
+opt.swapfile = false

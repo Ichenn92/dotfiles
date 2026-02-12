@@ -1,7 +1,4 @@
-require("config.lazy")
-
 -- Load core configurations
-require('core.colorscheme')
-require('core.keymaps')
-require('core.vim-options')
 require('cmd')
+require('core')
+require('lazy_bootstrap')

@@ -6,11 +6,11 @@ return {
 			lua = {
 				require("formatter.filetypes.lua").stylua,
 			},
-			typescript = {
-				require("formatter.filetypes.typescript").prettier,
-			},
 			dart = {
 				require("formatter.filetypes.dart").dartformat,
+			},
+			typescript = {
+				require("formatter.filetypes.typescript").prettier,
 			},
 			json = {
 				require("formatter.filetypes.json").prettier,

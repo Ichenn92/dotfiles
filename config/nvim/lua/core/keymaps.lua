@@ -1,11 +1,18 @@
 local keymap = vim.keymap -- for conciseness
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>")
 keymap.set("n", "<leader>h", ":nohlsearch<CR>")
 
 -- delete single character without copying into register
 keymap.set("n", "x", '"_x')
+
+-- increment/decrement numbers
+keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
+keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
 -- focus floating window
 keymap.set("n", "<leader>w", ":wincmd w<CR>")
@@ -29,7 +36,7 @@ keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Navigate vim panes better
-vim.keymap.set("n", "<c-k>", ":wincmd k<CR>")
-vim.keymap.set("n", "<c-j>", ":wincmd j<CR>")
-vim.keymap.set("n", "<c-h>", ":wincmd h<CR>")
-vim.keymap.set("n", "<c-l>", ":wincmd l<CR>")
+keymap.set("n", "<c-k>", ":wincmd k<CR>")
+keymap.set("n", "<c-j>", ":wincmd j<CR>")
+keymap.set("n", "<c-h>", ":wincmd h<CR>")
+keymap.set("n", "<c-l>", ":wincmd l<CR>")

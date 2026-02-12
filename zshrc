@@ -1,70 +1,132 @@
-# Neovim Performance Management Alias
-alias nvim-perf="$HOME/.dotfiles/scripts/nvim-performance.sh"
+# .zshrc - Interactive shell configuration
+# Sourced for interactive shells. Aliases, functions, prompt, keybindings, etc.
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# ============================================================================
+# POWERLEVEL10K INSTANT PROMPT (must be at top)
+# ============================================================================
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+# ============================================================================
+# ZSH OPTIONS
+# ============================================================================
+setopt AUTO_CD              # Change directory without cd
+setopt HIST_IGNORE_ALL_DUPS # Remove older duplicate entries from history
+setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks from history
+setopt SHARE_HISTORY        # Share history between sessions
+setopt INC_APPEND_HISTORY   # Write to history immediately
 
-# Application aliases
+# History configuration
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+
+# ============================================================================
+# PROMPT (POWERLEVEL10K)
+# ============================================================================
+if [[ -f "/opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+    source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+fi
+
+# Powerlevel10k configuration
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# ============================================================================
+# ZSH PLUGINS
+# ============================================================================
+# Note: syntax-highlighting must be loaded last
+if [[ -f "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+if [[ -f "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# ============================================================================
+# TOOL INITIALIZATIONS
+# ============================================================================
+# Zoxide (better cd)
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
+# ============================================================================
+# COMPLETION SYSTEMS
+# ============================================================================
+# Dart CLI completion
+if [[ -f "$HOME/.dart-cli-completion/zsh-config.zsh" ]]; then
+    source "$HOME/.dart-cli-completion/zsh-config.zsh"
+fi
+
+# Google Cloud SDK
+if [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]]; then
+    source "$HOME/google-cloud-sdk/path.zsh.inc"
+fi
+
+if [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]]; then
+    source "$HOME/google-cloud-sdk/completion.zsh.inc"
+fi
+
+# NVM bash completion (if needed for interactive use)
+if [[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]]; then
+    source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+fi
+
+# ============================================================================
+# ALIASES
+# ============================================================================
+# System utilities
 alias cleandns="sudo killall -HUP mDNSResponder && sudo dscacheutil -flushcache"
-# ---- Eza (better ls) ----
+
+# Enhanced tools
 alias ls="eza --icons=always"
-# ---- Zoxide (better cd) ----
-alias cd="z"
-eval "$(zoxide init zsh)"
+alias cd="z"  # Use zoxide instead of cd
 
-export GEM_HOME="$HOME/.gem"
-export PATH="$PATH:$HOME/.rbenv/bin"
-export PATH="$PATH:$HOME/.gem/bin"
-eval "$(rbenv init - zsh)"
+# Custom scripts
+alias nvim-perf="$HOME/.dotfiles/scripts/nvim-performance.sh"
 
-# Java injected binary.
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
-# Flutter global binaries
-export PATH="$PATH":"$HOME/.pub-cache/bin"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-## [Completion]
-## Completion scripts setup. Remove the following line to uninstall
-[[ -f /Users/tristan/.dart-cli-completion/zsh-config.zsh ]] && . /Users/tristan/.dart-cli-completion/zsh-config.zsh || true
-## [/Completion]
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tristan/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tristan/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/tristan/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tristan/google-cloud-sdk/completion.zsh.inc'; fi
-
+# ============================================================================
+# FUNCTIONS
+# ============================================================================
+# Kill process on specified port
 kill_port() {
     local port=$1
-    if [ -z "$port" ]; then
-        echo "Please provide a port number."
+    if [[ -z "$port" ]]; then
+        echo "Usage: kill_port <port_number>"
         return 1
     fi
 
-    lsof -ti tcp:"$port" | xargs kill -9 2>/dev/null
-    sleep 1  # Allow some time for the process to be killed
+    local pids=$(lsof -ti tcp:"$port" 2>/dev/null)
+    if [[ -z "$pids" ]]; then
+        echo "No process found listening on port $port"
+        return 0
+    fi
 
-    if lsof -i tcp:"$port" > /dev/null; then
-        echo "Port $port is still listening."
+    echo "$pids" | xargs kill -9 2>/dev/null
+    sleep 0.5
+
+    if lsof -i tcp:"$port" >/dev/null 2>&1; then
+        echo "Failed to kill process on port $port"
+        return 1
     else
-        echo "Port $port has been successfully killed."
+        echo "Successfully killed process on port $port"
     fi
 }
 
-# Homebrew
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Created by `pipx` on 2025-10-31 22:05:25
+export PATH="$PATH:/Users/tristan/.local/bin"
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /Users/tristan/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/tristan/.config/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+
+# bun completions
+[ -s "/Users/tristan/.bun/_bun" ] && source "/Users/tristan/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

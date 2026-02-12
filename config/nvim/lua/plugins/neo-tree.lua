@@ -14,6 +14,7 @@ return {
 		-- Set key mappings
 		vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {})
 		vim.keymap.set("n", "<leader>lb", ":Neotree buffers reveal float<CR>", {})
+		vim.keymap.set("n", "<leader>nr", ":Neotree reveal<CR>", {})
 
 		-- Setup neo-tree with recommended settings
 		require("neo-tree").setup({

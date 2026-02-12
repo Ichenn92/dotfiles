@@ -3,11 +3,11 @@ return {
 	cmd = "Copilot",
 	event = "InsertEnter",
 	config = function()
-		vim.lsp.config('copilot', { enabled = false })
+		vim.lsp.config("copilot", { enabled = true })
 		require("copilot").setup({
 			panel = {
 				enabled = false,
-				auto_refresh = true,
+				auto_refresh = false,
 				keymap = {
 					jump_prev = "[[",
 					jump_next = "]]",
@@ -34,7 +34,7 @@ return {
 				},
 			},
 			server_opts_overrides = {},
-			filetypes = { markdown = true, lua = true, javascript = true, typescript = true, dart = true }, -- customize as needed
+			filetypes = { markdown = true, lua = true, typescript = true, dart = true }, -- customize as needed
 			telemetry = { enabled = false },
 		})
 	end,
