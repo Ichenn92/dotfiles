@@ -40,3 +40,33 @@ keymap.set("n", "<c-k>", ":wincmd k<CR>")
 keymap.set("n", "<c-j>", ":wincmd j<CR>")
 keymap.set("n", "<c-h>", ":wincmd h<CR>")
 keymap.set("n", "<c-l>", ":wincmd l<CR>")
+
+-- OpenCode: Copy file path relative to cwd
+keymap.set("n", "<leader>p", function()
+	local relative_path = vim.fn.expand("%:.")
+	vim.fn.setreg("+", relative_path)
+	print("Copied: " .. relative_path)
+end, { desc = "Copy relative file path" })
+
+-- OpenCode: Copy file path with line number (single line)
+keymap.set("n", "<leader>l", function()
+	local relative_path = vim.fn.expand("%:.")
+	local line = vim.fn.line(".")
+	local result = relative_path .. ":" .. line
+	vim.fn.setreg("+", result)
+	print("Copied: " .. result)
+end, { desc = "Copy file path with line number" })
+
+-- OpenCode: Copy file path with line range (visual mode)
+keymap.set("x", "<leader>l", function()
+	local start_line = vim.fn.line("v")
+	local end_line = vim.fn.line(".")
+	-- Ensure start is before end
+	if start_line > end_line then
+		start_line, end_line = end_line, start_line
+	end
+	local relative_path = vim.fn.expand("%:.")
+	local result = relative_path .. ":" .. start_line .. "-" .. end_line
+	vim.fn.setreg("+", result)
+	print("Copied: " .. result)
+end, { desc = "Copy file path with line range" })
