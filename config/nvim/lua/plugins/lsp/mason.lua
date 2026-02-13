@@ -48,6 +48,20 @@ return {
             desc = "Show LSP symbols in a tree view",
           },
         },
+        config = function()
+          vim.lsp.config.dartls = {
+            cmd = { "dart", "language-server", "--protocol=lsp" },
+            filetypes = { "dart" },
+            root_markers = { "pubspec.yaml" },
+          }
+          -- Enable dartls for dart files
+          vim.api.nvim_create_autocmd("FileType", {
+            pattern = "dart",
+            callback = function()
+              vim.lsp.enable("dartls")
+            end,
+          })
+        end,
       },
     },
   },

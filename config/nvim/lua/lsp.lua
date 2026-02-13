@@ -48,20 +48,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     opts.desc = "Restart LSP"
     keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
-
-    local lsp_config = require("lspconfig")
-    lsp_config["dartls"].setup({
-      settings = {
-        dart = {
-          analysisExcludedFolders = {
-            vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
-            vim.fn.expand("$HOME/.pub-cache"),
-            vim.fn.expand("/opt/homebrew/"),
-            vim.fn.expand("$HOME/tools/flutter/"),
-          },
-        },
-      },
-    })
   end,
 })
 
