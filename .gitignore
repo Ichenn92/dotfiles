@@ -1,0 +1,15 @@
+**/.DS_Store
+
+# Local-only identity and secret-bearing overrides
+gitconfig.local
+ssh/config.local
+Brewfile.local
+.env
+.env.*
+!.env.example
+.secrets/
+
+# Tool output
+*.log
+.cache/
+

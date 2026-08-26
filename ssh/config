@@ -1,3 +1,5 @@
-Host bitbucket.org
+Include ~/.ssh/config.local
+
+Host *
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/tayo-ssh
+  UseKeychain yes

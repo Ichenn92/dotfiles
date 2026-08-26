@@ -25,6 +25,11 @@ print_usage() {
     echo "  help            Show this help message"
 }
 
+find_lsp_processes() {
+    ps -axo pid=,pcpu=,pmem=,rss=,comm=,args= | \
+        awk 'tolower($0) ~ /(language-server|tsserver|dartls|cssls)/ && $0 !~ /awk/ { print }'
+}
+
 profile_startup() {
     echo -e "${GREEN}🚀 Profiling Neovim startup time...${NC}"
     nvim --startuptime /tmp/nvim-startup.log +q
@@ -39,7 +44,7 @@ check_lsp_processes() {
     echo ""
     
     # Check for language servers
-    LSP_PROCESSES=$(ps aux | grep -i "language-server\|tsserver\|dartls\|cssls" | grep -v grep || true)
+    LSP_PROCESSES=$(find_lsp_processes || true)
     
     if [ -n "$LSP_PROCESSES" ]; then
         echo -e "${YELLOW}Running LSP processes:${NC}"
@@ -48,7 +53,7 @@ check_lsp_processes() {
         
         # Show CPU usage
         echo -e "${YELLOW}CPU usage breakdown:${NC}"
-        ps aux | grep -i "language-server\|tsserver\|dartls\|cssls" | grep -v grep | awk '{print $3"% CPU - "$11}' || true
+        echo "$LSP_PROCESSES" | awk '{print $2"% CPU - "$5}'
     else
         echo -e "${GREEN}✅ No LSP processes currently running${NC}"
     fi
@@ -58,7 +63,7 @@ kill_high_cpu_lsp() {
     echo -e "${GREEN}🔪 Checking for high CPU LSP processes...${NC}"
     
     # Find processes using more than 20% CPU
-    HIGH_CPU_PIDS=$(ps aux | grep -i "language-server\|tsserver\|dartls\|cssls" | grep -v grep | awk '$3 > 20 {print $2}' || true)
+    HIGH_CPU_PIDS=$(find_lsp_processes | awk '$2 > 20 {print $1}' || true)
     
     if [ -n "$HIGH_CPU_PIDS" ]; then
         echo -e "${YELLOW}Found high CPU LSP processes. Killing...${NC}"
@@ -76,15 +81,20 @@ check_memory_usage() {
     echo -e "${GREEN}💾 Checking Neovim memory usage...${NC}"
     echo ""
     
-    NVIM_PROCESSES=$(ps aux | grep nvim | grep -v grep || true)
+    NVIM_PIDS=$(pgrep -x nvim | paste -sd, - || true)
+    if [ -n "$NVIM_PIDS" ]; then
+        NVIM_PROCESSES=$(ps -p "$NVIM_PIDS" -o pid=,pcpu=,pmem=,rss=,comm=)
+    else
+        NVIM_PROCESSES=""
+    fi
     
     if [ -n "$NVIM_PROCESSES" ]; then
         echo -e "${YELLOW}Neovim memory usage:${NC}"
-        echo "$NVIM_PROCESSES" | awk '{print $4"% MEM - "$6" KB - "$11}'
+        echo "$NVIM_PROCESSES" | awk '{print $3"% MEM - "$4" KB - "$5}'
         echo ""
         
         # Total memory usage
-        TOTAL_MEM=$(echo "$NVIM_PROCESSES" | awk '{sum += $6} END {print sum}')
+        TOTAL_MEM=$(echo "$NVIM_PROCESSES" | awk '{sum += $4} END {print sum}')
         echo -e "${YELLOW}Total Neovim memory usage: ${TOTAL_MEM} KB${NC}"
     else
         echo -e "${GREEN}✅ No Neovim processes currently running${NC}"

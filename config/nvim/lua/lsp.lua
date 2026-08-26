@@ -38,10 +38,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
     keymap.set("n", "<leader>dh", vim.diagnostic.open_float, opts)
 
     opts.desc = "Previous Diagnostic"
-    keymap.set("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
+    keymap.set("n", "<leader>dp", function()
+      vim.diagnostic.jump({ count = -1, float = true })
+    end, opts)
 
     opts.desc = "Next Diagnostic"
-    keymap.set("n", "<leader>dn", vim.diagnostic.goto_next, opts)
+    keymap.set("n", "<leader>dn", function()
+      vim.diagnostic.jump({ count = 1, float = true })
+    end, opts)
 
     opts.desc = "Diagnostic List"
     keymap.set("n", "<leader>dl", vim.diagnostic.setqflist, opts)
@@ -50,6 +54,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
   end,
 })
+
+vim.lsp.config("cssls", {
+  settings = {
+    css = { validate = true, lint = { unknownAtRules = "ignore" } },
+    scss = { validate = true, lint = { unknownAtRules = "ignore" } },
+    less = { validate = true, lint = { unknownAtRules = "ignore" } },
+  },
+})
+vim.lsp.enable("cssls")
 
 -- vim.lsp.inlay_hint.enable(true)
 

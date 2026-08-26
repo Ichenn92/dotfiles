@@ -35,12 +35,6 @@ keymap.set("n", "<leader>q", ":bp<bar>sp<bar>bn<bar>bd<CR>")
 keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
--- Navigate vim panes better
-keymap.set("n", "<c-k>", ":wincmd k<CR>")
-keymap.set("n", "<c-j>", ":wincmd j<CR>")
-keymap.set("n", "<c-h>", ":wincmd h<CR>")
-keymap.set("n", "<c-l>", ":wincmd l<CR>")
-
 -- OpenCode: Copy file path relative to cwd
 keymap.set("n", "<leader>p", function()
   local relative_path = vim.fn.expand("%:.")

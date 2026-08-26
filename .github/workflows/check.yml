@@ -1,0 +1,29 @@
+name: Check dotfiles
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install validation tools
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install gitleaks shellcheck neovim
+
+      - name: Run repository checks
+        env:
+          DOTFILES_NVIM_SYNC: "true"
+        run: ./scripts/check.sh

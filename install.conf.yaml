@@ -1,4 +1,10 @@
-- clean: ['~']
+- defaults:
+    link:
+      relink: true
+
+- clean:
+    - '~'
+    - '~/.config'
 
 - link:
     ~/.profile: profile
@@ -10,7 +16,10 @@
     ~/.zprofile: zprofile
     ~/.zshenv: zshenv
     ~/.zshrc: zshrc
+    ~/.aerospace.toml:
+      path: aerospace/aerospace.toml
+      create: true
     ~/.config/:
+      create: true
       glob: true
       path: config/*
-      relink: true

@@ -1,0 +1,14 @@
+# Optional macOS desktop environment. Trust is scoped to individual packages.
+tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae"
+tap "magicmark/tap"
+tap "nikitabobko/tap"
+tap "thurstonsand/tap"
+
+brew "felixkratz/formulae/borders", trusted: true
+brew "magicmark/tap/spacelist", trusted: true
+brew "thurstonsand/tap/ghosttykit", trusted: true
+
+cask "nikitabobko/tap/aerospace", trusted: true
+cask "ghostty"
+cask "font-hack-nerd-font"
+cask "font-jetbrains-mono-nerd-font"

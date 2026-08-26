@@ -1,24 +1,15 @@
-[commit]
-	gpgsign = true
-[user]
-	signingkey = EAA517B476057721
-	name = IchennDev
-	email = tristan.horler@gmail.com
+[include]
+	path = ~/.gitconfig.local
 [core]
 	editor = nvim
-  pager = delta
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+	pager = delta
 [interactive]
-  diffFilter = delta --color-only
+	diffFilter = delta --color-only
 [delta]
-  navigate = true  # use n and N to move between diff sections
-  dark = true      # or light = true, or omit for auto-detection
+	navigate = true
+	dark = true
 [merge]
-  conflictStyle = zdiff3
+	conflictStyle = zdiff3
 	tool = opendiff
 [diff]
 	external = difft --color=always --syntax-highlight=off

@@ -1,0 +1,16 @@
+# Use Ghostty splits instead of native tabs so AeroSpace can tile the window.
+keybind = super+t=new_split:auto
+
+# Navigate Ghostty splits unless an inner Neovim layer owns the surface.
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:down
+keybind = ctrl+k=goto_split:up
+keybind = ctrl+l=goto_split:right
+keybind = bypass/
+keybind = bypass/ctrl+h=text:\x08
+keybind = bypass/ctrl+j=text:\x0a
+keybind = bypass/ctrl+k=text:\x0b
+keybind = bypass/ctrl+l=text:\x0c
+
+custom-shader = focus-pane.glsl
+custom-shader-animation = false

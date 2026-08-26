@@ -1,8 +1,11 @@
+local is_dotfiles_check = vim.env.DOTFILES_CHECK == "1"
+
 return {
   {
     "williamboman/mason-lspconfig.nvim",
+    enabled = not is_dotfiles_check,
     opts = {
-      ensure_installed = {
+      ensure_installed = is_dotfiles_check and {} or {
         "lua_ls",
         "gopls",
         "ts_ls",
@@ -48,27 +51,14 @@ return {
             desc = "Show LSP symbols in a tree view",
           },
         },
-        config = function()
-          vim.lsp.config.dartls = {
-            cmd = { "dart", "language-server", "--protocol=lsp" },
-            filetypes = { "dart" },
-            root_markers = { "pubspec.yaml" },
-          }
-          -- Enable dartls for dart files
-          vim.api.nvim_create_autocmd("FileType", {
-            pattern = "dart",
-            callback = function()
-              vim.lsp.enable("dartls")
-            end,
-          })
-        end,
       },
     },
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    enabled = not is_dotfiles_check,
     opts = {
-      ensure_installed = {
+      ensure_installed = is_dotfiles_check and {} or {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
         "isort", -- python formatter
@@ -76,6 +66,7 @@ return {
         "pylint",
         "eslint_d",
       },
+      run_on_start = not is_dotfiles_check,
     },
     dependencies = {
       "williamboman/mason.nvim",
