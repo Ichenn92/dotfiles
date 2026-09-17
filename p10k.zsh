@@ -34,8 +34,13 @@
     # =========================[ Line #1 ]=========================
     os_icon                 # os identifier
     dir                     # current directory
-    vcs                     # git status
     # =========================[ Line #2 ]=========================
+    newline                 # \n
+    vcs                     # git status
+    # =========================[ Line #3 ]=========================
+    newline                 # \n
+    firebase                # active firebase project (user-defined, see prompt_firebase below)
+    # =========================[ Line #4 ]=========================
     newline                 # \n
     prompt_char             # prompt symbol
   )
@@ -214,6 +219,8 @@
   ##################################[ dir: current directory ]##################################
   # Default current directory color.
   typeset -g POWERLEVEL9K_DIR_FOREGROUND=3
+  # Folder icon in front of the current directory (nf-fa-folder_open, U+F07C).
+  typeset -g POWERLEVEL9K_DIR_VISUAL_IDENTIFIER_EXPANSION=''
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
@@ -1644,6 +1651,58 @@
   # typeset -g POWERLEVEL9K_TIME_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # Custom prefix.
   # typeset -g POWERLEVEL9K_TIME_PREFIX='%fat '
+
+  ##################[ firebase: active Firebase project of the current directory ]##################
+  # Resolution: nearest .firebaserc up the tree -> activeProjects[<that dir>] in the firebase-tools
+  # configstore (what `firebase use` writes) -> resolved through the .firebaserc alias map, falling
+  # back to projects.default. Pure zsh, no forks: `$(<file)` is read inline by zsh.
+  function prompt_firebase() {
+    setopt local_options extended_glob   # the anon-function `emulate` above is not in effect here
+
+    local root=$PWD
+    while [[ ! -f $root/.firebaserc ]]; do
+      [[ -z $root || $root == / ]] && return
+      root=${root:h}
+    done
+
+    local cfg=${XDG_CONFIG_HOME:-$HOME/.config}/configstore/firebase-tools.json
+    local json ap active rc aliases project
+
+    if [[ -r $cfg ]]; then
+      json=$(<$cfg)
+      if [[ $json == (#b)*\"activeProjects\"[[:space:]]#:[[:space:]]#\{([^}]#)\}* ]]; then
+        ap=$match[1]
+        [[ $ap == (#b)*\"${root}\"[[:space:]]#:[[:space:]]#\"([^\"]#)\"* ]] && active=$match[1]
+      fi
+    fi
+
+    rc=$(<$root/.firebaserc)
+    [[ $rc == (#b)*\"projects\"[[:space:]]#:[[:space:]]#\{([^}]#)\}* ]] && aliases=$match[1]
+
+    if [[ -n $active ]]; then
+      if [[ $aliases == (#b)*\"${active}\"[[:space:]]#:[[:space:]]#\"([^\"]#)\"* ]]; then
+        project=$match[1]
+      else
+        project=$active            # `firebase use` was given a project id, not an alias
+      fi
+    elif [[ $aliases == (#b)*\"default\"[[:space:]]#:[[:space:]]#\"([^\"]#)\"* ]]; then
+      project=$match[1]
+    fi
+    [[ -n $project ]] || return
+
+    local color=4                  # blue: unrecognised environment
+    case $project in
+      (*prod*)               color=1;;   # red
+      (*stag*|*preprod*)     color=3;;   # yellow
+      (*dev*|*test*|*local*) color=2;;   # green
+    esac
+
+    p10k segment -f $color -i '󰥧' -t "${project//\%/%%}"
+  }
+
+  # prompt_firebase always makes the same `p10k segment` calls for a given directory, so it is safe to
+  # replay it in the instant prompt.
+  function instant_prompt_firebase() { prompt_firebase }
 
   # Example of a user-defined prompt segment. Function prompt_example will be called on every
   # prompt if `example` prompt segment is added to POWERLEVEL9K_LEFT_PROMPT_ELEMENTS or
